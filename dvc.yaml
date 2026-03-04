@@ -1,16 +1,16 @@
 stages:
   prepare:
-    cmd: uv run python src/prepare.py data/dataset.csv data/prepared
+    cmd: uv run python src/stages/prepare.py data/dataset.csv data/prepared
     deps:
       - data/dataset.csv
-      - src/prepare.py
+      - src/stages/prepare.py
     outs:
       - data/prepared
 
   train:
-    cmd: uv run python src/train.py data/prepared data/models
+    cmd: uv run python src/stages/train.py data/prepared data/models
     deps:
       - data/prepared
-      - src/train.py
+      - src/stages/train.py
     outs:
       - data/models

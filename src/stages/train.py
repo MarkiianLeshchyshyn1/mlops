@@ -116,7 +116,6 @@ def main() -> None:
         mlflow.log_params(
             {
                 "text_column": args.text_column,
-                "target_column": args.target_column,
                 "max_features": args.max_features,
                 "min_df": args.min_df,
                 "ngram_max": args.ngram_max,
