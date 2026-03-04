@@ -11,5 +11,6 @@ wheels/
 
 .ipynb_checkpoints
 
-data
-mlruns
+mlruns/
+mlartifacts/
+data/
