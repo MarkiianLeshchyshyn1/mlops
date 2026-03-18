@@ -1,0 +1,84 @@
+name: Model CI (Train, Test, Report)
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    env:
+      DATA_PATH: tests/fixtures/sample_dataset.csv
+      PREPARED_DIR: .ci/prepared
+      MODEL_DIR: .ci/model
+      F1_THRESHOLD: "0.70"
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Set up CML
+        uses: iterative/setup-cml@v2
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Lint with flake8
+        run: |
+          flake8 src tests --count --select=E9,F63,F7,F82 --show-source --statistics
+
+      - name: Format check with black
+        run: |
+          black src tests --check
+
+      - name: Run pre-train tests
+        run: |
+          pytest tests/test_pretrain.py -q
+
+      - name: Prepare CI dataset
+        run: |
+          python src/stages/prepare.py "$DATA_PATH" "$PREPARED_DIR"
+
+      - name: Train model
+        run: |
+          python src/stages/train.py "$PREPARED_DIR" "$MODEL_DIR"
+
+      - name: Run post-train tests
+        env:
+          ARTIFACT_DIR: .ci/model
+        run: |
+          pytest tests/test_posttrain.py -q
+
+      - name: Create CML report
+        if: github.event_name == 'pull_request'
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "## Model Metrics" > report.md
+          cat "$MODEL_DIR/metrics.json" >> report.md
+          echo "" >> report.md
+          echo "## Confusion Matrix" >> report.md
+          cml publish "$MODEL_DIR/confusion_matrix.png" --md >> report.md
+          echo "" >> report.md
+          echo "## Quality Gate" >> report.md
+          echo "F1 threshold: $F1_THRESHOLD" >> report.md
+          cml comment create report.md
+
+      - name: Upload model artifact
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        uses: actions/upload-artifact@v4
+        with:
+          name: model-artifacts
+          path: .ci/model

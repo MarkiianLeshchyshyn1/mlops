@@ -1,0 +1,23 @@
+type: logistic_regression
+
+fixed:
+  penalty: l2
+  max_iter: 1200
+
+search_space:
+  max_features:
+    low: 10000
+    high: 30000
+    step: 5000
+  min_df:
+    choices: [2, 3, 4, 5]
+  ngram_max:
+    choices: [1, 2]
+  c_value:
+    low: 1.0e-2
+    high: 10.0
+    log: true
+  solver:
+    choices: [liblinear, saga]
+  class_weight:
+    choices: [none, balanced]

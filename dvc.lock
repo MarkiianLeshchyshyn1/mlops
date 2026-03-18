@@ -1,13 +1,13 @@
 schema: '2.0'
 stages:
   prepare:
-    cmd: uv run python src/prepare.py data/dataset.csv data/prepared
+    cmd: uv run python src/stages/prepare.py data/dataset.csv data/prepared
     deps:
     - path: data/dataset.csv
       hash: md5
       md5: 308443a50e5c993e7b8a1cdb95750026
       size: 66212309
-    - path: src/prepare.py
+    - path: src/stages/prepare.py
       hash: md5
       md5: a884de0797da85014682cf925395b139
       size: 2494
@@ -18,20 +18,20 @@ stages:
       size: 66262172
       nfiles: 2
   train:
-    cmd: uv run python src/train.py data/prepared data/models
+    cmd: uv run python src/stages/train.py data/prepared data/models
     deps:
     - path: data/prepared
       hash: md5
       md5: 53059441931ba5b9ce51583111a30b66.dir
       size: 66262172
       nfiles: 2
-    - path: src/train.py
+    - path: src/stages/train.py
       hash: md5
       md5: a2ea5b43f0b0c69dad05b2f0b537474d
       size: 5225
     outs:
     - path: data/models
       hash: md5
-      md5: 36044cc91da2714aebb17685c377f040.dir
+      md5: bd8064a4068bdc5b293b524eb45a70c5.dir
       size: 925169
       nfiles: 2

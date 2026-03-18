@@ -1,0 +1,8 @@
+n_trials: 20
+metric: f1
+direction: maximize
+sampler: random
+use_cv: false
+cv_folds: 5
+startup_trials: 0
+study_name_prefix: imdb_lr_random

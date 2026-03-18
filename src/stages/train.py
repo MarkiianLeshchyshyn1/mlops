@@ -4,16 +4,27 @@ import argparse
 import json
 import re
 from pathlib import Path
-from tempfile import TemporaryDirectory
 
 import joblib
+import matplotlib
 import mlflow
 import mlflow.sklearn
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, roc_auc_score
+from sklearn.metrics import (
+    ConfusionMatrixDisplay,
+    accuracy_score,
+    confusion_matrix,
+    f1_score,
+    precision_score,
+    recall_score,
+    roc_auc_score,
+)
 from sklearn.pipeline import Pipeline
+
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
 
 
 class TextPreprocessor:
@@ -107,8 +118,15 @@ def main() -> None:
 
     model_path = args.model_dir / "model.joblib"
     metrics_path = args.model_dir / "metrics.json"
+    confusion_matrix_path = args.model_dir / "confusion_matrix.png"
     joblib.dump(pipeline, model_path)
     metrics_path.write_text(json.dumps(metrics, indent=2), encoding="utf-8")
+    cm = confusion_matrix(y_test, y_pred)
+    display = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=["negative", "positive"])
+    display.plot(cmap="Blues", colorbar=False)
+    plt.tight_layout()
+    plt.savefig(confusion_matrix_path, dpi=150)
+    plt.close()
 
     mlflow.set_tracking_uri(args.tracking_uri)
     mlflow.set_experiment(args.experiment_name)
@@ -125,11 +143,8 @@ def main() -> None:
             }
         )
         mlflow.log_metrics(metrics)
-
-        with TemporaryDirectory() as tmp_dir:
-            tmp_metrics = Path(tmp_dir) / "metrics.json"
-            tmp_metrics.write_text(json.dumps(metrics, indent=2), encoding="utf-8")
-            mlflow.log_artifact(str(tmp_metrics), artifact_path="evaluation")
+        mlflow.log_artifact(str(metrics_path), artifact_path="evaluation")
+        mlflow.log_artifact(str(confusion_matrix_path), artifact_path="evaluation")
 
         mlflow.sklearn.log_model(sk_model=pipeline, artifact_path="model")
 

@@ -1,0 +1,30 @@
+defaults:
+  - model: logistic_regression
+  - hpo: optuna
+  - _self_
+
+seed: 42
+
+data:
+  prepared_dir: data/prepared
+  text_column: review
+  target_column: sentiment
+  validation_size: 0.2
+  random_state: ${seed}
+
+artifacts:
+  model_dir: models/hpo
+  report_dir: reports/hpo
+
+mlflow:
+  tracking_uri: file:./mlruns
+  experiment_prefix: imdb_hpo
+  log_model: true
+  register_model: false
+  model_name: imdb_best_sentiment_model
+  stage: Staging
+
+hydra:
+  run:
+    dir: .
+  output_subdir: null
