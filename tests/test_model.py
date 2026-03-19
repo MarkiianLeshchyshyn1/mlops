@@ -18,8 +18,12 @@ def test_pretrain_data_schema_basic() -> None:
     assert not missing, f"Missing columns: {sorted(missing)}"
     assert df["review"].notna().all(), "review contains missing values"
     assert df["sentiment"].notna().all(), "sentiment contains missing values"
-    assert df["review"].astype(str).str.strip().ne("").all(), "review contains empty strings"
-    assert df["sentiment"].isin(["positive", "negative"]).all(), "unexpected sentiment labels found"
+    assert (
+        df["review"].astype(str).str.strip().ne("").all()
+    ), "review contains empty strings"
+    assert (
+        df["sentiment"].isin(["positive", "negative"]).all()
+    ), "unexpected sentiment labels found"
     assert len(df) >= 10, "Too few rows for a learning experiment"
 
 
@@ -27,7 +31,9 @@ def test_posttrain_artifacts_exist() -> None:
     artifact_dir = Path(os.getenv("ARTIFACT_DIR", ".ci/model"))
     assert (artifact_dir / "model.joblib").exists(), "model.joblib not found"
     assert (artifact_dir / "metrics.json").exists(), "metrics.json not found"
-    assert (artifact_dir / "confusion_matrix.png").exists(), "confusion_matrix.png not found"
+    assert (
+        artifact_dir / "confusion_matrix.png"
+    ).exists(), "confusion_matrix.png not found"
 
 
 def test_posttrain_metrics_json_has_required_keys() -> None:

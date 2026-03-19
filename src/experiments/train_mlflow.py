@@ -63,7 +63,9 @@ class DatasetLoader:
             raise ValueError(f"Missing required columns: {sorted(missing)}")
 
         cleaned = df[[self.config.text_column, self.config.target_column]].dropna()
-        cleaned = cleaned[cleaned[self.config.text_column].astype(str).str.strip() != ""]
+        cleaned = cleaned[
+            cleaned[self.config.text_column].astype(str).str.strip() != ""
+        ]
         cleaned[self.config.target_column] = (
             cleaned[self.config.target_column].astype(str).str.strip().str.lower()
         )
@@ -126,7 +128,9 @@ class SentimentExperimentRunner:
         return encoded.astype(int)
 
     @staticmethod
-    def _metric_dict(y_true: np.ndarray, y_pred: np.ndarray, y_prob: np.ndarray) -> dict[str, float]:
+    def _metric_dict(
+        y_true: np.ndarray, y_pred: np.ndarray, y_prob: np.ndarray
+    ) -> dict[str, float]:
         return {
             "accuracy": float(accuracy_score(y_true, y_pred)),
             "precision": float(precision_score(y_true, y_pred, zero_division=0)),
@@ -181,7 +185,9 @@ class SentimentExperimentRunner:
             )
             mlflow.log_metrics(metrics)
 
-            report = classification_report(y_test, y_pred, target_names=["negative", "positive"])
+            report = classification_report(
+                y_test, y_pred, target_names=["negative", "positive"]
+            )
             matrix = confusion_matrix(y_test, y_pred).tolist()
             artifacts_payload = {
                 "classification_report": report,
@@ -202,23 +208,69 @@ class SentimentExperimentRunner:
 def default_experiments() -> list[ExperimentConfig]:
     # 6 experiments so the assignment requirement of >=5 is always satisfied.
     return [
-        ExperimentConfig("lr_uni_baseline", max_features=12000, min_df=2, ngram_max=1, c_value=1.0, class_weight=None),
-        ExperimentConfig("lr_uni_strong_reg", max_features=12000, min_df=2, ngram_max=1, c_value=0.5, class_weight=None),
-        ExperimentConfig("lr_uni_weak_reg", max_features=12000, min_df=2, ngram_max=1, c_value=2.0, class_weight=None),
-        ExperimentConfig("lr_bi_baseline", max_features=20000, min_df=2, ngram_max=2, c_value=1.0, class_weight=None),
-        ExperimentConfig("lr_bi_min_df_3", max_features=20000, min_df=3, ngram_max=2, c_value=1.0, class_weight=None),
-        ExperimentConfig("lr_bi_balanced", max_features=25000, min_df=2, ngram_max=2, c_value=1.0, class_weight="balanced"),
+        ExperimentConfig(
+            "lr_uni_baseline",
+            max_features=12000,
+            min_df=2,
+            ngram_max=1,
+            c_value=1.0,
+            class_weight=None,
+        ),
+        ExperimentConfig(
+            "lr_uni_strong_reg",
+            max_features=12000,
+            min_df=2,
+            ngram_max=1,
+            c_value=0.5,
+            class_weight=None,
+        ),
+        ExperimentConfig(
+            "lr_uni_weak_reg",
+            max_features=12000,
+            min_df=2,
+            ngram_max=1,
+            c_value=2.0,
+            class_weight=None,
+        ),
+        ExperimentConfig(
+            "lr_bi_baseline",
+            max_features=20000,
+            min_df=2,
+            ngram_max=2,
+            c_value=1.0,
+            class_weight=None,
+        ),
+        ExperimentConfig(
+            "lr_bi_min_df_3",
+            max_features=20000,
+            min_df=3,
+            ngram_max=2,
+            c_value=1.0,
+            class_weight=None,
+        ),
+        ExperimentConfig(
+            "lr_bi_balanced",
+            max_features=25000,
+            min_df=2,
+            ngram_max=2,
+            c_value=1.0,
+            class_weight="balanced",
+        ),
     ]
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Train IMDB sentiment model and track experiments with MLflow.")
+    parser = argparse.ArgumentParser(
+        description="Train IMDB sentiment model and track experiments with MLflow."
+    )
     parser.add_argument("--data-path", type=Path, default=Path("data/dataset.csv"))
     parser.add_argument("--text-column", type=str, default="review")
     parser.add_argument("--target-column", type=str, default="sentiment")
     parser.add_argument("--test-size", type=float, default=0.2)
     parser.add_argument("--random-state", type=int, default=42)
-    parser.add_argument("--experiment-name", type=str, default="imdb_sentiment_baselines")
+    parser.add_argument(
+        "--experiment-name", type=str, default="imdb_sentiment_baselines"
+    )
     parser.add_argument("--tracking-uri", type=str, default="file:./mlruns")
     return parser.parse_args()
 
@@ -234,7 +286,9 @@ def main() -> None:
         test_size=args.test_size,
         random_state=args.random_state,
     )
-    runner = SentimentExperimentRunner(data_config=data_config, experiment_name=args.experiment_name)
+    runner = SentimentExperimentRunner(
+        data_config=data_config, experiment_name=args.experiment_name
+    )
 
     results = []
     for exp_cfg in default_experiments():
@@ -245,7 +299,11 @@ def main() -> None:
             f"f1={result['f1']:.4f}, accuracy={result['accuracy']:.4f}, roc_auc={result['roc_auc']:.4f}"
         )
 
-    leaderboard = pd.DataFrame(results).sort_values(["f1", "roc_auc"], ascending=False).reset_index(drop=True)
+    leaderboard = (
+        pd.DataFrame(results)
+        .sort_values(["f1", "roc_auc"], ascending=False)
+        .reset_index(drop=True)
+    )
     print("\nLeaderboard (top by f1):")
     print(leaderboard.to_string(index=False))
 

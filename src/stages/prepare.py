@@ -10,7 +10,9 @@ from sklearn.model_selection import train_test_split
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Prepare dataset for training.")
     parser.add_argument("input_file", type=Path, help="Path to raw CSV dataset.")
-    parser.add_argument("output_dir", type=Path, help="Directory for prepared train/test CSV files.")
+    parser.add_argument(
+        "output_dir", type=Path, help="Directory for prepared train/test CSV files."
+    )
     parser.add_argument("--text-column", type=str, default="review")
     parser.add_argument("--target-column", type=str, default="sentiment")
     parser.add_argument("--test-size", type=float, default=0.2)
@@ -25,7 +27,9 @@ def validate_columns(df: pd.DataFrame, text_column: str, target_column: str) -> 
         raise ValueError(f"Missing required columns: {sorted(missing)}")
 
 
-def clean_dataset(df: pd.DataFrame, text_column: str, target_column: str) -> pd.DataFrame:
+def clean_dataset(
+    df: pd.DataFrame, text_column: str, target_column: str
+) -> pd.DataFrame:
     cleaned = df[[text_column, target_column]].dropna()
     cleaned[text_column] = cleaned[text_column].astype(str).str.strip()
     cleaned[target_column] = cleaned[target_column].astype(str).str.strip().str.lower()

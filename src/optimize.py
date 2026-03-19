@@ -17,7 +17,13 @@ from mlflow.tracking import MlflowClient
 from omegaconf import DictConfig, OmegaConf
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, roc_auc_score
+from sklearn.metrics import (
+    accuracy_score,
+    f1_score,
+    precision_score,
+    recall_score,
+    roc_auc_score,
+)
 from sklearn.model_selection import StratifiedKFold, train_test_split
 from sklearn.pipeline import Pipeline
 
@@ -39,7 +45,9 @@ def encode_target(y: pd.Series) -> pd.Series:
     mapping = {"negative": 0, "positive": 1}
     encoded = y.map(mapping)
     if encoded.isna().any():
-        raise ValueError("Target contains unsupported labels. Expected positive/negative.")
+        raise ValueError(
+            "Target contains unsupported labels. Expected positive/negative."
+        )
     return encoded.astype(int)
 
 
@@ -64,7 +72,9 @@ def git_commit_hash() -> str:
     return result.stdout.strip() or "unknown"
 
 
-def load_data(cfg: DictConfig) -> tuple[pd.Series, pd.Series, pd.Series, pd.Series, pd.Series, pd.Series]:
+def load_data(
+    cfg: DictConfig,
+) -> tuple[pd.Series, pd.Series, pd.Series, pd.Series, pd.Series, pd.Series]:
     prepared_dir = Path(cfg.data.prepared_dir)
     train_path = prepared_dir / "train.csv"
     test_path = prepared_dir / "test.csv"
@@ -75,9 +85,13 @@ def load_data(cfg: DictConfig) -> tuple[pd.Series, pd.Series, pd.Series, pd.Seri
     test_df = pd.read_csv(test_path)
 
     X_train_full = train_df[cfg.data.text_column].astype(str)
-    y_train_full = encode_target(train_df[cfg.data.target_column].astype(str).str.strip().str.lower())
+    y_train_full = encode_target(
+        train_df[cfg.data.target_column].astype(str).str.strip().str.lower()
+    )
     X_test = test_df[cfg.data.text_column].astype(str)
-    y_test = encode_target(test_df[cfg.data.target_column].astype(str).str.strip().str.lower())
+    y_test = encode_target(
+        test_df[cfg.data.target_column].astype(str).str.strip().str.lower()
+    )
 
     X_train, X_val, y_train, y_val = train_test_split(
         X_train_full,
@@ -138,20 +152,30 @@ def suggest_params(trial: optuna.Trial, cfg: DictConfig) -> dict[str, object]:
             int(search_space.max_features.high),
             step=int(search_space.max_features.step),
         ),
-        "min_df": trial.suggest_categorical("min_df", list(search_space.min_df.choices)),
-        "ngram_max": trial.suggest_categorical("ngram_max", list(search_space.ngram_max.choices)),
+        "min_df": trial.suggest_categorical(
+            "min_df", list(search_space.min_df.choices)
+        ),
+        "ngram_max": trial.suggest_categorical(
+            "ngram_max", list(search_space.ngram_max.choices)
+        ),
         "c_value": trial.suggest_float(
             "c_value",
             float(search_space.c_value.low),
             float(search_space.c_value.high),
             log=bool(search_space.c_value.log),
         ),
-        "solver": trial.suggest_categorical("solver", list(search_space.solver.choices)),
-        "class_weight": trial.suggest_categorical("class_weight", list(search_space.class_weight.choices)),
+        "solver": trial.suggest_categorical(
+            "solver", list(search_space.solver.choices)
+        ),
+        "class_weight": trial.suggest_categorical(
+            "class_weight", list(search_space.class_weight.choices)
+        ),
     }
 
 
-def metric_dict(y_true: pd.Series, y_pred: np.ndarray, y_prob: np.ndarray) -> dict[str, float]:
+def metric_dict(
+    y_true: pd.Series, y_pred: np.ndarray, y_prob: np.ndarray
+) -> dict[str, float]:
     return {
         "accuracy": float(accuracy_score(y_true, y_pred)),
         "precision": float(precision_score(y_true, y_pred, zero_division=0)),
@@ -202,7 +226,9 @@ def evaluate_cv(
 def make_sampler(cfg: DictConfig) -> optuna.samplers.BaseSampler:
     sampler_name = str(cfg.hpo.sampler).lower()
     if sampler_name == "tpe":
-        return optuna.samplers.TPESampler(seed=int(cfg.seed), n_startup_trials=int(cfg.hpo.startup_trials))
+        return optuna.samplers.TPESampler(
+            seed=int(cfg.seed), n_startup_trials=int(cfg.hpo.startup_trials)
+        )
     if sampler_name == "random":
         return optuna.samplers.RandomSampler(seed=int(cfg.seed))
     raise ValueError(f"Unsupported sampler: {cfg.hpo.sampler}")
@@ -261,14 +287,18 @@ def main(cfg: DictConfig) -> None:
             if cfg.hpo.use_cv:
                 X_cv = pd.concat([X_train, X_val], ignore_index=True)
                 y_cv = pd.concat([y_train, y_val], ignore_index=True)
-                metrics = evaluate_cv(cfg, params, X_cv, y_cv, int(cfg.hpo.cv_folds), int(cfg.seed))
+                metrics = evaluate_cv(
+                    cfg, params, X_cv, y_cv, int(cfg.hpo.cv_folds), int(cfg.seed)
+                )
             else:
                 metrics = evaluate_holdout(model, X_train, y_train, X_val, y_val)
 
             mlflow.log_metrics(metrics)
             return float(metrics[str(cfg.hpo.metric)])
 
-    with mlflow.start_run(run_name=f"{cfg.hpo.study_name_prefix}_{cfg.hpo.sampler}") as parent_run:
+    with mlflow.start_run(
+        run_name=f"{cfg.hpo.study_name_prefix}_{cfg.hpo.sampler}"
+    ) as parent_run:
         mlflow.set_tags(
             {
                 "sampler": cfg.hpo.sampler,
@@ -277,7 +307,9 @@ def main(cfg: DictConfig) -> None:
                 "git_commit": metadata["git_commit"],
             }
         )
-        mlflow.log_dict(OmegaConf.to_container(cfg, resolve=True), "config_resolved.json")
+        mlflow.log_dict(
+            OmegaConf.to_container(cfg, resolve=True), "config_resolved.json"
+        )
         mlflow.log_dict(metadata, "run_metadata.json")
 
         study = optuna.create_study(
@@ -291,7 +323,9 @@ def main(cfg: DictConfig) -> None:
         final_model = build_pipeline(cfg, best_params)
         X_final_train = pd.concat([X_train, X_val], ignore_index=True)
         y_final_train = pd.concat([y_train, y_val], ignore_index=True)
-        final_metrics = evaluate_holdout(final_model, X_final_train, y_final_train, X_test, y_test)
+        final_metrics = evaluate_holdout(
+            final_model, X_final_train, y_final_train, X_test, y_test
+        )
 
         model_dir = Path(cfg.artifacts.model_dir) / str(cfg.hpo.sampler)
         report_dir = Path(cfg.artifacts.report_dir) / str(cfg.hpo.sampler)
@@ -316,7 +350,9 @@ def main(cfg: DictConfig) -> None:
         )
 
         mlflow.log_metric(f"best_validation_{cfg.hpo.metric}", float(study.best_value))
-        mlflow.log_metrics({f"test_{name}": value for name, value in final_metrics.items()})
+        mlflow.log_metrics(
+            {f"test_{name}": value for name, value in final_metrics.items()}
+        )
         mlflow.log_dict(best_params, "best_params.json")
         mlflow.log_artifact(str(params_path), artifact_path="reports")
         mlflow.log_artifact(str(metrics_path), artifact_path="reports")

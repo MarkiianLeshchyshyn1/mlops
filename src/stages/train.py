@@ -41,8 +41,12 @@ class TextPreprocessor:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Train model on prepared data.")
-    parser.add_argument("prepared_dir", type=Path, help="Directory with train.csv and test.csv")
-    parser.add_argument("model_dir", type=Path, help="Directory where trained model is stored")
+    parser.add_argument(
+        "prepared_dir", type=Path, help="Directory with train.csv and test.csv"
+    )
+    parser.add_argument(
+        "model_dir", type=Path, help="Directory where trained model is stored"
+    )
     parser.add_argument("--text-column", type=str, default="review")
     parser.add_argument("--target-column", type=str, default="sentiment")
     parser.add_argument("--tracking-uri", type=str, default="file:./mlruns")
@@ -59,7 +63,9 @@ def encode_target(y: pd.Series) -> pd.Series:
     mapping = {"negative": 0, "positive": 1}
     encoded = y.map(mapping)
     if encoded.isna().any():
-        raise ValueError("Target contains unsupported labels. Expected positive/negative.")
+        raise ValueError(
+            "Target contains unsupported labels. Expected positive/negative."
+        )
     return encoded.astype(int)
 
 
@@ -68,7 +74,9 @@ def main() -> None:
     train_path = args.prepared_dir / "train.csv"
     test_path = args.prepared_dir / "test.csv"
     if not train_path.exists() or not test_path.exists():
-        raise FileNotFoundError(f"Expected prepared files: {train_path} and {test_path}")
+        raise FileNotFoundError(
+            f"Expected prepared files: {train_path} and {test_path}"
+        )
 
     args.model_dir.mkdir(parents=True, exist_ok=True)
 
@@ -76,8 +84,12 @@ def main() -> None:
     test_df = pd.read_csv(test_path)
     X_train = train_df[args.text_column].astype(str)
     X_test = test_df[args.text_column].astype(str)
-    y_train = encode_target(train_df[args.target_column].astype(str).str.strip().str.lower())
-    y_test = encode_target(test_df[args.target_column].astype(str).str.strip().str.lower())
+    y_train = encode_target(
+        train_df[args.target_column].astype(str).str.strip().str.lower()
+    )
+    y_test = encode_target(
+        test_df[args.target_column].astype(str).str.strip().str.lower()
+    )
 
     pipeline = Pipeline(
         [
@@ -122,7 +134,9 @@ def main() -> None:
     joblib.dump(pipeline, model_path)
     metrics_path.write_text(json.dumps(metrics, indent=2), encoding="utf-8")
     cm = confusion_matrix(y_test, y_pred)
-    display = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=["negative", "positive"])
+    display = ConfusionMatrixDisplay(
+        confusion_matrix=cm, display_labels=["negative", "positive"]
+    )
     display.plot(cmap="Blues", colorbar=False)
     plt.tight_layout()
     plt.savefig(confusion_matrix_path, dpi=150)
@@ -150,7 +164,9 @@ def main() -> None:
         except PermissionError:
             # Some restricted environments block MLflow temp directories.
             # Local artifacts are already saved in model_dir and remain usable.
-            print("Warning: skipped MLflow model logging due to filesystem permissions.")
+            print(
+                "Warning: skipped MLflow model logging due to filesystem permissions."
+            )
 
     print(json.dumps(metrics, indent=2))
     print(f"Saved model artifact: {model_path}")
