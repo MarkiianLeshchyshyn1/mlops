@@ -270,6 +270,7 @@ def main(cfg: DictConfig) -> None:
         "seed": int(cfg.seed),
     }
 
+
     def objective(trial: optuna.Trial) -> float:
         params = suggest_params(trial, cfg)
         with mlflow.start_run(run_name=f"trial_{trial.number:03d}", nested=True):
