@@ -1,0 +1,8 @@
+{
+  "max_features": 30000,
+  "min_df": 2,
+  "ngram_max": 2,
+  "c_value": 3.8211294416912254,
+  "solver": "saga",
+  "class_weight": "none"
+}

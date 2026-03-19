@@ -58,13 +58,12 @@ For CI a small reproducible dataset is stored in `tests/fixtures/sample_dataset.
 Main files added for Lab 4:
 - `requirements.txt`
 - `.github/workflows/cml.yaml`
-- `tests/test_pretrain.py`
-- `tests/test_posttrain.py`
+- `tests/test_model.py`
 
 Local smoke run:
 ```bash
 uv sync
 uv run python src/stages/prepare.py tests/fixtures/sample_dataset.csv .ci/prepared
 uv run python src/stages/train.py .ci/prepared .ci/model
-uv run pytest tests/test_pretrain.py tests/test_posttrain.py -q
+uv run pytest tests/test_model.py -q
 ```

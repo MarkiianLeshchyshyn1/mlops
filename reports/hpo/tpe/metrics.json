@@ -1,0 +1,11 @@
+{
+  "best_validation_score": 0.9051980198019802,
+  "validation_metric": "f1",
+  "test_metrics": {
+    "accuracy": 0.9113,
+    "precision": 0.9065032615141332,
+    "recall": 0.9172,
+    "f1": 0.9118202604632667,
+    "roc_auc": 0.9717211600000001
+  }
+}

@@ -145,8 +145,12 @@ def main() -> None:
         mlflow.log_metrics(metrics)
         mlflow.log_artifact(str(metrics_path), artifact_path="evaluation")
         mlflow.log_artifact(str(confusion_matrix_path), artifact_path="evaluation")
-
-        mlflow.sklearn.log_model(sk_model=pipeline, artifact_path="model")
+        try:
+            mlflow.sklearn.log_model(sk_model=pipeline, artifact_path="model")
+        except PermissionError:
+            # Some restricted environments block MLflow temp directories.
+            # Local artifacts are already saved in model_dir and remain usable.
+            print("Warning: skipped MLflow model logging due to filesystem permissions.")
 
     print(json.dumps(metrics, indent=2))
     print(f"Saved model artifact: {model_path}")

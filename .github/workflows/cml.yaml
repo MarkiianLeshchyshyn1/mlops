@@ -3,7 +3,6 @@ name: Model CI (Train, Test, Report)
 on:
   push:
   pull_request:
-  workflow_dispatch:
 
 permissions:
   contents: read
@@ -45,7 +44,7 @@ jobs:
 
       - name: Run pre-train tests
         run: |
-          pytest tests/test_pretrain.py -q
+          pytest tests/test_model.py -q -k "pretrain"
 
       - name: Prepare CI dataset
         run: |
@@ -59,7 +58,7 @@ jobs:
         env:
           ARTIFACT_DIR: .ci/model
         run: |
-          pytest tests/test_posttrain.py -q
+          pytest tests/test_model.py -q -k "posttrain"
 
       - name: Create CML report
         if: github.event_name == 'pull_request'
@@ -75,10 +74,3 @@ jobs:
           echo "## Quality Gate" >> report.md
           echo "F1 threshold: $F1_THRESHOLD" >> report.md
           cml comment create report.md
-
-      - name: Upload model artifact
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        uses: actions/upload-artifact@v4
-        with:
-          name: model-artifacts
-          path: .ci/model

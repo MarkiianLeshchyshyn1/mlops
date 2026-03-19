@@ -1,0 +1,8 @@
+{
+  "max_features": 25000,
+  "min_df": 4,
+  "ngram_max": 2,
+  "c_value": 1.6714890550250636,
+  "solver": "liblinear",
+  "class_weight": "none"
+}
