@@ -1,0 +1,155 @@
+[2026-03-25T18:26:36.523+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
+[2026-03-25T18:26:36.544+0000] {taskinstance.py:2612} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: ml_training_pipeline.register_model manual__2026-03-25T18:26:29.892730+00:00 [queued]>
+[2026-03-25T18:26:36.555+0000] {taskinstance.py:2612} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: ml_training_pipeline.register_model manual__2026-03-25T18:26:29.892730+00:00 [queued]>
+[2026-03-25T18:26:36.556+0000] {taskinstance.py:2865} INFO - Starting attempt 1 of 1
+[2026-03-25T18:26:36.568+0000] {taskinstance.py:2888} INFO - Executing <Task(BashOperator): register_model> on 2026-03-25 18:26:29.892730+00:00
+[2026-03-25T18:26:36.575+0000] {standard_task_runner.py:104} INFO - Running: ['***', 'tasks', 'run', 'ml_training_pipeline', 'register_model', 'manual__2026-03-25T18:26:29.892730+00:00', '--job-id', '55', '--raw', '--subdir', 'DAGS_FOLDER/ml_training_pipeline.py', '--cfg-path', '/tmp/tmpacir5i3x']
+[2026-03-25T18:26:36.578+0000] {standard_task_runner.py:105} INFO - Job 55: Subtask register_model
+[2026-03-25T18:26:36.578+0000] {logging_mixin.py:190} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:70 DeprecationWarning: This process (pid=223) is multi-threaded, use of fork() may lead to deadlocks in the child.
+[2026-03-25T18:26:36.578+0000] {standard_task_runner.py:72} INFO - Started process 224 to run task
+[2026-03-25T18:26:36.630+0000] {task_command.py:467} INFO - Running <TaskInstance: ml_training_pipeline.register_model manual__2026-03-25T18:26:29.892730+00:00 [running]> on host 1461e8b4e1d6
+[2026-03-25T18:26:36.833+0000] {taskinstance.py:3131} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='ml_training_pipeline' AIRFLOW_CTX_TASK_ID='register_model' AIRFLOW_CTX_EXECUTION_DATE='2026-03-25T18:26:29.892730+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-03-25T18:26:29.892730+00:00'
+[2026-03-25T18:26:36.834+0000] {taskinstance.py:731} INFO - ::endgroup::
+[2026-03-25T18:26:36.844+0000] {subprocess.py:63} INFO - Tmp dir root location: /tmp
+[2026-03-25T18:26:36.845+0000] {subprocess.py:75} INFO - Running command: ['/usr/bin/bash', '-c', 'cd /opt/***/project && python src/stages/register.py data/models --tracking-uri file:/opt/***/project/mlruns --model-name sentiment_model --stage Staging']
+[2026-03-25T18:26:36.853+0000] {subprocess.py:86} INFO - Output:
+[2026-03-25T18:26:40.348+0000] {subprocess.py:93} INFO - /home/***/.local/lib/python3.12/site-packages/pydantic/_internal/_fields.py:132: UserWarning: Field "model_name" in PromptModelConfig has conflict with protected namespace "model_".
+[2026-03-25T18:26:40.349+0000] {subprocess.py:93} INFO - 
+[2026-03-25T18:26:40.349+0000] {subprocess.py:93} INFO - You may be able to resolve this warning by setting `model_config['protected_namespaces'] = ()`.
+[2026-03-25T18:26:40.349+0000] {subprocess.py:93} INFO -   warnings.warn(
+[2026-03-25T18:26:42.571+0000] {subprocess.py:93} INFO - /home/***/.local/lib/python3.12/site-packages/mlflow/tracking/_tracking_service/utils.py:184: FutureWarning: The filesystem tracking backend (e.g., './mlruns') is deprecated as of February 2026. Consider transitioning to a database backend (e.g., 'sqlite:///mlflow.db') to take advantage of the latest MLflow features. See https://mlflow.org/docs/latest/self-hosting/migrate-from-file-store for migration guidance.
+[2026-03-25T18:26:42.571+0000] {subprocess.py:93} INFO -   return FileStore(store_uri, store_uri)
+[2026-03-25T18:26:42.837+0000] {subprocess.py:93} INFO - 2026/03/25 18:26:42 WARNING mlflow.utils.git_utils: Failed to import Git (the Git executable is probably not on your PATH), so Git SHA is not available. Error: Failed to initialize: Bad git executable.
+[2026-03-25T18:26:42.837+0000] {subprocess.py:93} INFO - The git executable must be specified in one of the following ways:
+[2026-03-25T18:26:42.837+0000] {subprocess.py:93} INFO -     - be included in your $PATH
+[2026-03-25T18:26:42.837+0000] {subprocess.py:93} INFO -     - be set via $GIT_PYTHON_GIT_EXECUTABLE
+[2026-03-25T18:26:42.837+0000] {subprocess.py:93} INFO -     - explicitly set via git.refresh(<full-path-to-git-executable>)
+[2026-03-25T18:26:42.837+0000] {subprocess.py:93} INFO - 
+[2026-03-25T18:26:42.837+0000] {subprocess.py:93} INFO - All git commands will error until this is rectified.
+[2026-03-25T18:26:42.837+0000] {subprocess.py:93} INFO - 
+[2026-03-25T18:26:42.838+0000] {subprocess.py:93} INFO - This initial message can be silenced or aggravated in the future by setting the
+[2026-03-25T18:26:42.838+0000] {subprocess.py:93} INFO - $GIT_PYTHON_REFRESH environment variable. Use one of the following values:
+[2026-03-25T18:26:42.838+0000] {subprocess.py:93} INFO -     - quiet|q|silence|s|silent|none|n|0: for no message or exception
+[2026-03-25T18:26:42.838+0000] {subprocess.py:93} INFO -     - warn|w|warning|log|l|1: for a warning message (logging level CRITICAL, displayed by default)
+[2026-03-25T18:26:42.838+0000] {subprocess.py:93} INFO -     - error|e|exception|raise|r|2: for a raised exception
+[2026-03-25T18:26:42.838+0000] {subprocess.py:93} INFO - 
+[2026-03-25T18:26:42.838+0000] {subprocess.py:93} INFO - Example:
+[2026-03-25T18:26:42.838+0000] {subprocess.py:93} INFO -     export GIT_PYTHON_REFRESH=quiet
+[2026-03-25T18:26:42.838+0000] {subprocess.py:93} INFO - 
+[2026-03-25T18:26:42.842+0000] {subprocess.py:93} INFO - 2026/03/25 18:26:42 WARNING mlflow.models.model: `artifact_path` is deprecated. Please use `name` instead.
+[2026-03-25T18:26:42.849+0000] {subprocess.py:93} INFO - 2026/03/25 18:26:42 WARNING mlflow.sklearn: Saving scikit-learn models in the pickle or cloudpickle format requires exercising caution because these formats rely on Python's object serialization mechanism, which can execute arbitrary code during deserialization. The recommended safe alternative is the 'skops' format. For more information, see: https://scikit-learn.org/stable/model_persistence.html
+[2026-03-25T18:26:46.981+0000] {subprocess.py:93} INFO - Traceback (most recent call last):
+[2026-03-25T18:26:46.981+0000] {subprocess.py:93} INFO -   File "/opt/***/project/src/stages/register.py", line 96, in <module>
+[2026-03-25T18:26:46.982+0000] {subprocess.py:93} INFO -     main()
+[2026-03-25T18:26:46.982+0000] {subprocess.py:93} INFO -   File "/opt/***/project/src/stages/register.py", line 77, in main
+[2026-03-25T18:26:46.982+0000] {subprocess.py:93} INFO -     model_info = mlflow.sklearn.log_model(
+[2026-03-25T18:26:46.982+0000] {subprocess.py:93} INFO -                  ^^^^^^^^^^^^^^^^^^^^^^^^^
+[2026-03-25T18:26:46.982+0000] {subprocess.py:93} INFO -   File "/home/***/.local/lib/python3.12/site-packages/mlflow/sklearn/__init__.py", line 477, in log_model
+[2026-03-25T18:26:46.982+0000] {subprocess.py:93} INFO -     return Model.log(
+[2026-03-25T18:26:46.982+0000] {subprocess.py:93} INFO -            ^^^^^^^^^^
+[2026-03-25T18:26:46.983+0000] {subprocess.py:93} INFO -   File "/home/***/.local/lib/python3.12/site-packages/mlflow/models/model.py", line 1186, in log
+[2026-03-25T18:26:46.983+0000] {subprocess.py:93} INFO -     with _use_logged_model(model=model):
+[2026-03-25T18:26:46.983+0000] {subprocess.py:93} INFO -          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[2026-03-25T18:26:46.983+0000] {subprocess.py:93} INFO -   File "/usr/local/lib/python3.12/contextlib.py", line 144, in __exit__
+[2026-03-25T18:26:46.983+0000] {subprocess.py:93} INFO -     next(self.gen)
+[2026-03-25T18:26:46.983+0000] {subprocess.py:93} INFO -   File "/home/***/.local/lib/python3.12/site-packages/mlflow/tracking/fluent.py", line 2338, in _use_logged_model
+[2026-03-25T18:26:46.983+0000] {subprocess.py:93} INFO -     finalize_logged_model(model.model_id, LoggedModelStatus.READY)
+[2026-03-25T18:26:46.983+0000] {subprocess.py:93} INFO -   File "/home/***/.local/lib/python3.12/site-packages/mlflow/tracking/fluent.py", line 2646, in finalize_logged_model
+[2026-03-25T18:26:46.984+0000] {subprocess.py:93} INFO -     return MlflowClient().finalize_logged_model(model_id, status)
+[2026-03-25T18:26:46.984+0000] {subprocess.py:93} INFO -            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[2026-03-25T18:26:46.984+0000] {subprocess.py:93} INFO -   File "/home/***/.local/lib/python3.12/site-packages/mlflow/tracking/client.py", line 5824, in finalize_logged_model
+[2026-03-25T18:26:46.984+0000] {subprocess.py:93} INFO -     return self._tracking_client.finalize_logged_model(
+[2026-03-25T18:26:46.984+0000] {subprocess.py:93} INFO -            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[2026-03-25T18:26:46.984+0000] {subprocess.py:93} INFO -   File "/home/***/.local/lib/python3.12/site-packages/mlflow/tracking/_tracking_service/client.py", line 899, in finalize_logged_model
+[2026-03-25T18:26:46.984+0000] {subprocess.py:93} INFO -     return self.store.finalize_logged_model(model_id, status)
+[2026-03-25T18:26:46.985+0000] {subprocess.py:93} INFO -            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[2026-03-25T18:26:46.985+0000] {subprocess.py:93} INFO -   File "/home/***/.local/lib/python3.12/site-packages/mlflow/store/tracking/file_store.py", line 2357, in finalize_logged_model
+[2026-03-25T18:26:46.985+0000] {subprocess.py:93} INFO -     model_dict = self._get_model_dict(model_id)
+[2026-03-25T18:26:46.985+0000] {subprocess.py:93} INFO -                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[2026-03-25T18:26:46.985+0000] {subprocess.py:93} INFO -   File "/home/***/.local/lib/python3.12/site-packages/mlflow/store/tracking/file_store.py", line 2512, in _get_model_dict
+[2026-03-25T18:26:46.985+0000] {subprocess.py:93} INFO -     model_dict: dict[str, Any] = self._get_model_info_from_dir(model_dir)
+[2026-03-25T18:26:46.985+0000] {subprocess.py:93} INFO -                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[2026-03-25T18:26:46.986+0000] {subprocess.py:93} INFO -   File "/home/***/.local/lib/python3.12/site-packages/mlflow/store/tracking/file_store.py", line 2552, in _get_model_info_from_dir
+[2026-03-25T18:26:46.986+0000] {subprocess.py:93} INFO -     model_dict = FileStore._read_yaml(model_dir, FileStore.META_DATA_FILE_NAME)
+[2026-03-25T18:26:46.986+0000] {subprocess.py:93} INFO -                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[2026-03-25T18:26:46.986+0000] {subprocess.py:93} INFO -   File "/home/***/.local/lib/python3.12/site-packages/mlflow/store/tracking/file_store.py", line 1670, in _read_yaml
+[2026-03-25T18:26:46.986+0000] {subprocess.py:93} INFO -     return _read_helper(root, file_name, attempts_remaining=retries)
+[2026-03-25T18:26:46.986+0000] {subprocess.py:93} INFO -            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[2026-03-25T18:26:46.986+0000] {subprocess.py:93} INFO -   File "/home/***/.local/lib/python3.12/site-packages/mlflow/store/tracking/file_store.py", line 1663, in _read_helper
+[2026-03-25T18:26:46.987+0000] {subprocess.py:93} INFO -     result = read_yaml(root, file_name)
+[2026-03-25T18:26:46.987+0000] {subprocess.py:93} INFO -              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+[2026-03-25T18:26:46.987+0000] {subprocess.py:93} INFO -   File "/home/***/.local/lib/python3.12/site-packages/mlflow/utils/yaml_utils.py", line 104, in read_yaml
+[2026-03-25T18:26:46.987+0000] {subprocess.py:93} INFO -     raise MissingConfigException(f"Yaml file '{file_path}' does not exist.")
+[2026-03-25T18:26:46.987+0000] {subprocess.py:93} INFO - mlflow.exceptions.MissingConfigException: Yaml file '/opt/***/project/mlruns/***_registration_artifacts/models/m-9e00e8c34fc14da7b2c29be5096915ea/meta.yaml' does not exist.
+[2026-03-25T18:26:47.439+0000] {subprocess.py:97} INFO - Command exited with return code 1
+[2026-03-25T18:26:47.449+0000] {taskinstance.py:3310} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 767, in _execute_task
+    result = _execute_callable(context=context, **execute_callable_kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 733, in _execute_callable
+    return ExecutionCallableRunner(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/operator_helpers.py", line 252, in run
+    return self.func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/baseoperator.py", line 406, in wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/operators/bash.py", line 249, in execute
+    raise AirflowException(
+airflow.exceptions.AirflowException: Bash command failed. The command returned a non-zero exit code 1.
+[2026-03-25T18:26:47.453+0000] {taskinstance.py:1225} INFO - Marking task as FAILED. dag_id=ml_training_pipeline, task_id=register_model, run_id=manual__2026-03-25T18:26:29.892730+00:00, execution_date=20260325T182629, start_date=20260325T182636, end_date=20260325T182647
+[2026-03-25T18:26:47.466+0000] {taskinstance.py:340} INFO - ::group::Post task execution logs
+[2026-03-25T18:26:47.467+0000] {standard_task_runner.py:124} ERROR - Failed to execute job 55 for task register_model (Bash command failed. The command returned a non-zero exit code 1.; 224)
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/task/task_runner/standard_task_runner.py", line 117, in _start_by_fork
+    ret = args.func(args, dag=self.dag)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/cli/cli_config.py", line 49, in command
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/cli.py", line 115, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/cli/commands/task_command.py", line 483, in task_run
+    task_return_code = _run_task_by_selected_method(args, _dag, ti)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/cli/commands/task_command.py", line 256, in _run_task_by_selected_method
+    return _run_raw_task(args, ti)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/cli/commands/task_command.py", line 341, in _run_raw_task
+    return ti._run_raw_task(
+           ^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/session.py", line 97, in wrapper
+    return func(*args, session=session, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 3004, in _run_raw_task
+    return _run_raw_task(
+           ^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 273, in _run_raw_task
+    TaskInstance._execute_task_with_callbacks(
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 3158, in _execute_task_with_callbacks
+    result = self._execute_task(context, task_orig)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 3182, in _execute_task
+    return _execute_task(self, context, task_orig)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 767, in _execute_task
+    result = _execute_callable(context=context, **execute_callable_kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 733, in _execute_callable
+    return ExecutionCallableRunner(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/operator_helpers.py", line 252, in run
+    return self.func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/baseoperator.py", line 406, in wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/operators/bash.py", line 249, in execute
+    raise AirflowException(
+airflow.exceptions.AirflowException: Bash command failed. The command returned a non-zero exit code 1.
+[2026-03-25T18:26:47.507+0000] {local_task_job_runner.py:266} INFO - Task exited with return code 1
+[2026-03-25T18:26:47.523+0000] {taskinstance.py:3900} INFO - 0 downstream tasks scheduled from follow-on schedule check
+[2026-03-25T18:26:47.539+0000] {local_task_job_runner.py:245} INFO - ::endgroup::

@@ -1,0 +1,60 @@
+name: Main CI
+
+on:
+  push:
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    env:
+      DATA_PATH: tests/fixtures/sample_dataset.csv
+      PREPARED_DIR: .ci/prepared
+      MODEL_DIR: .ci/model
+      ARTIFACT_DIR: .ci/model
+      F1_THRESHOLD: "0.70"
+      AIRFLOW_VERSION: "2.10.2"
+      PYTHON_VERSION: "3.12"
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install project dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Install Airflow for DAG test
+        run: |
+          pip install \
+            "apache-airflow==${AIRFLOW_VERSION}" \
+            "apache-airflow-providers-standard"
+
+      - name: Lint Python code
+        run: |
+          flake8 src tests dags --count --select=E9,F63,F7,F82 --show-source --statistics
+
+      - name: Prepare CI dataset
+        run: |
+          python src/stages/prepare.py "$DATA_PATH" "$PREPARED_DIR"
+
+      - name: Train model
+        run: |
+          python src/stages/train.py "$PREPARED_DIR" "$MODEL_DIR"
+
+      - name: Run model artifact tests
+        run: |
+          pytest tests/test_model.py -q
+
+      - name: Run DAG integrity test
+        run: |
+          pytest tests/test_dag.py -q
+
+      - name: Build Docker image
+        run: |
+          docker build -t mlops-lab .

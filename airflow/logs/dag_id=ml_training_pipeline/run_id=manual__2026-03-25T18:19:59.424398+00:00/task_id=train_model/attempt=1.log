@@ -1,0 +1,69 @@
+[2026-03-25T18:20:03.313+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
+[2026-03-25T18:20:03.328+0000] {taskinstance.py:2612} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: ml_training_pipeline.train_model manual__2026-03-25T18:19:59.424398+00:00 [queued]>
+[2026-03-25T18:20:03.333+0000] {taskinstance.py:2612} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: ml_training_pipeline.train_model manual__2026-03-25T18:19:59.424398+00:00 [queued]>
+[2026-03-25T18:20:03.334+0000] {taskinstance.py:2865} INFO - Starting attempt 1 of 1
+[2026-03-25T18:20:03.343+0000] {taskinstance.py:2888} INFO - Executing <Task(BashOperator): train_model> on 2026-03-25 18:19:59.424398+00:00
+[2026-03-25T18:20:03.348+0000] {standard_task_runner.py:104} INFO - Running: ['***', 'tasks', 'run', 'ml_training_pipeline', 'train_model', 'manual__2026-03-25T18:19:59.424398+00:00', '--job-id', '35', '--raw', '--subdir', 'DAGS_FOLDER/ml_training_pipeline.py', '--cfg-path', '/tmp/tmpmrzpyjxf']
+[2026-03-25T18:20:03.350+0000] {standard_task_runner.py:105} INFO - Job 35: Subtask train_model
+[2026-03-25T18:20:03.351+0000] {logging_mixin.py:190} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:70 DeprecationWarning: This process (pid=196) is multi-threaded, use of fork() may lead to deadlocks in the child.
+[2026-03-25T18:20:03.351+0000] {standard_task_runner.py:72} INFO - Started process 197 to run task
+[2026-03-25T18:20:03.389+0000] {task_command.py:467} INFO - Running <TaskInstance: ml_training_pipeline.train_model manual__2026-03-25T18:19:59.424398+00:00 [running]> on host 1461e8b4e1d6
+[2026-03-25T18:20:03.454+0000] {taskinstance.py:3131} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='ml_training_pipeline' AIRFLOW_CTX_TASK_ID='train_model' AIRFLOW_CTX_EXECUTION_DATE='2026-03-25T18:19:59.424398+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-03-25T18:19:59.424398+00:00'
+[2026-03-25T18:20:03.454+0000] {taskinstance.py:731} INFO - ::endgroup::
+[2026-03-25T18:20:03.575+0000] {subprocess.py:63} INFO - Tmp dir root location: /tmp
+[2026-03-25T18:20:03.576+0000] {subprocess.py:75} INFO - Running command: ['/usr/bin/bash', '-c', 'cd /opt/***/project && dvc repro train']
+[2026-03-25T18:20:03.584+0000] {subprocess.py:86} INFO - Output:
+[2026-03-25T18:20:04.443+0000] {subprocess.py:93} INFO - Stage 'prepare' didn't change, skipping
+[2026-03-25T18:20:04.450+0000] {subprocess.py:93} INFO - Running stage 'train':
+[2026-03-25T18:20:04.450+0000] {subprocess.py:93} INFO - > python src/stages/train.py data/prepared data/models --tracking-uri file:/opt/***/project/mlruns --experiment-name ***_demo_pipeline
+[2026-03-25T18:20:05.187+0000] {subprocess.py:93} INFO - /home/***/.local/lib/python3.12/site-packages/pydantic/_internal/_fields.py:132: UserWarning: Field "model_name" in PromptModelConfig has conflict with protected namespace "model_".
+[2026-03-25T18:20:05.187+0000] {subprocess.py:93} INFO - 
+[2026-03-25T18:20:05.187+0000] {subprocess.py:93} INFO - You may be able to resolve this warning by setting `model_config['protected_namespaces'] = ()`.
+[2026-03-25T18:20:05.188+0000] {subprocess.py:93} INFO -   warnings.warn(
+[2026-03-25T18:20:07.197+0000] {subprocess.py:93} INFO - /home/***/.local/lib/python3.12/site-packages/mlflow/tracking/_tracking_service/utils.py:184: FutureWarning: The filesystem tracking backend (e.g., './mlruns') is deprecated as of February 2026. Consider transitioning to a database backend (e.g., 'sqlite:///mlflow.db') to take advantage of the latest MLflow features. See https://mlflow.org/docs/latest/self-hosting/migrate-from-file-store for migration guidance.
+[2026-03-25T18:20:07.197+0000] {subprocess.py:93} INFO -   return FileStore(store_uri, store_uri)
+[2026-03-25T18:20:07.201+0000] {subprocess.py:93} INFO - 2026/03/25 18:20:07 INFO mlflow.tracking.fluent: Experiment with name '***_demo_pipeline' does not exist. Creating a new experiment.
+[2026-03-25T18:20:07.423+0000] {subprocess.py:93} INFO - 2026/03/25 18:20:07 WARNING mlflow.utils.git_utils: Failed to import Git (the Git executable is probably not on your PATH), so Git SHA is not available. Error: Failed to initialize: Bad git executable.
+[2026-03-25T18:20:07.423+0000] {subprocess.py:93} INFO - The git executable must be specified in one of the following ways:
+[2026-03-25T18:20:07.423+0000] {subprocess.py:93} INFO -     - be included in your $PATH
+[2026-03-25T18:20:07.423+0000] {subprocess.py:93} INFO -     - be set via $GIT_PYTHON_GIT_EXECUTABLE
+[2026-03-25T18:20:07.423+0000] {subprocess.py:93} INFO -     - explicitly set via git.refresh(<full-path-to-git-executable>)
+[2026-03-25T18:20:07.423+0000] {subprocess.py:93} INFO - 
+[2026-03-25T18:20:07.424+0000] {subprocess.py:93} INFO - All git commands will error until this is rectified.
+[2026-03-25T18:20:07.424+0000] {subprocess.py:93} INFO - 
+[2026-03-25T18:20:07.424+0000] {subprocess.py:93} INFO - This initial message can be silenced or aggravated in the future by setting the
+[2026-03-25T18:20:07.424+0000] {subprocess.py:93} INFO - $GIT_PYTHON_REFRESH environment variable. Use one of the following values:
+[2026-03-25T18:20:07.424+0000] {subprocess.py:93} INFO -     - quiet|q|silence|s|silent|none|n|0: for no message or exception
+[2026-03-25T18:20:07.424+0000] {subprocess.py:93} INFO -     - warn|w|warning|log|l|1: for a warning message (logging level CRITICAL, displayed by default)
+[2026-03-25T18:20:07.424+0000] {subprocess.py:93} INFO -     - error|e|exception|raise|r|2: for a raised exception
+[2026-03-25T18:20:07.424+0000] {subprocess.py:93} INFO - 
+[2026-03-25T18:20:07.424+0000] {subprocess.py:93} INFO - Example:
+[2026-03-25T18:20:07.424+0000] {subprocess.py:93} INFO -     export GIT_PYTHON_REFRESH=quiet
+[2026-03-25T18:20:07.424+0000] {subprocess.py:93} INFO - 
+[2026-03-25T18:20:07.431+0000] {subprocess.py:93} INFO - 2026/03/25 18:20:07 WARNING mlflow.models.model: `artifact_path` is deprecated. Please use `name` instead.
+[2026-03-25T18:20:07.440+0000] {subprocess.py:93} INFO - 2026/03/25 18:20:07 WARNING mlflow.sklearn: Saving scikit-learn models in the pickle or cloudpickle format requires exercising caution because these formats rely on Python's object serialization mechanism, which can execute arbitrary code during deserialization. The recommended safe alternative is the 'skops' format. For more information, see: https://scikit-learn.org/stable/model_persistence.html
+[2026-03-25T18:20:14.110+0000] {subprocess.py:93} INFO - {
+[2026-03-25T18:20:14.110+0000] {subprocess.py:93} INFO -   "accuracy": 0.9,
+[2026-03-25T18:20:14.110+0000] {subprocess.py:93} INFO -   "precision": 0.8333333333333334,
+[2026-03-25T18:20:14.111+0000] {subprocess.py:93} INFO -   "recall": 1.0,
+[2026-03-25T18:20:14.111+0000] {subprocess.py:93} INFO -   "f1": 0.9090909090909091,
+[2026-03-25T18:20:14.111+0000] {subprocess.py:93} INFO -   "roc_auc": 1.0
+[2026-03-25T18:20:14.111+0000] {subprocess.py:93} INFO - }
+[2026-03-25T18:20:14.111+0000] {subprocess.py:93} INFO - Saved model artifact: data/models/model.joblib
+[2026-03-25T18:20:14.111+0000] {subprocess.py:93} INFO - Saved model artifact: data/models/model.pkl
+[2026-03-25T18:20:14.551+0000] {subprocess.py:93} INFO - Updating lock file 'dvc.lock'
+[2026-03-25T18:20:14.554+0000] {subprocess.py:93} INFO - 
+[2026-03-25T18:20:14.554+0000] {subprocess.py:93} INFO - To track the changes with git, run:
+[2026-03-25T18:20:14.554+0000] {subprocess.py:93} INFO - 
+[2026-03-25T18:20:14.554+0000] {subprocess.py:93} INFO - 	git add dvc.lock
+[2026-03-25T18:20:14.554+0000] {subprocess.py:93} INFO - 
+[2026-03-25T18:20:14.555+0000] {subprocess.py:93} INFO - To enable auto staging, run:
+[2026-03-25T18:20:14.555+0000] {subprocess.py:93} INFO - 
+[2026-03-25T18:20:14.555+0000] {subprocess.py:93} INFO - 	dvc config core.autostage true
+[2026-03-25T18:20:14.561+0000] {subprocess.py:93} INFO - Use `dvc push` to send your updates to remote storage.
+[2026-03-25T18:20:14.715+0000] {subprocess.py:97} INFO - Command exited with return code 0
+[2026-03-25T18:20:14.738+0000] {taskinstance.py:340} INFO - ::group::Post task execution logs
+[2026-03-25T18:20:14.739+0000] {taskinstance.py:352} INFO - Marking task as SUCCESS. dag_id=ml_training_pipeline, task_id=train_model, run_id=manual__2026-03-25T18:19:59.424398+00:00, execution_date=20260325T181959, start_date=20260325T182003, end_date=20260325T182014
+[2026-03-25T18:20:14.781+0000] {local_task_job_runner.py:266} INFO - Task exited with return code 0
+[2026-03-25T18:20:14.802+0000] {taskinstance.py:3900} INFO - 1 downstream tasks scheduled from follow-on schedule check
+[2026-03-25T18:20:14.804+0000] {local_task_job_runner.py:245} INFO - ::endgroup::

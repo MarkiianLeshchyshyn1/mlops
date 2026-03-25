@@ -30,6 +30,7 @@ def test_pretrain_data_schema_basic() -> None:
 def test_posttrain_artifacts_exist() -> None:
     artifact_dir = Path(os.getenv("ARTIFACT_DIR", ".ci/model"))
     assert (artifact_dir / "model.joblib").exists(), "model.joblib not found"
+    assert (artifact_dir / "model.pkl").exists(), "model.pkl not found"
     assert (artifact_dir / "metrics.json").exists(), "metrics.json not found"
     assert (
         artifact_dir / "confusion_matrix.png"

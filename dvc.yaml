@@ -1,14 +1,14 @@
 stages:
   prepare:
-    cmd: uv run python src/stages/prepare.py data/dataset.csv data/prepared
+    cmd: python src/stages/prepare.py tests/fixtures/sample_dataset.csv data/prepared
     deps:
-      - data/dataset.csv
+      - tests/fixtures/sample_dataset.csv
       - src/stages/prepare.py
     outs:
       - data/prepared
 
   train:
-    cmd: uv run python src/stages/train.py data/prepared data/models
+    cmd: python src/stages/train.py data/prepared data/models --tracking-uri file:/opt/airflow/project/mlruns --experiment-name airflow_demo_pipeline
     deps:
       - data/prepared
       - src/stages/train.py

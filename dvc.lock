@@ -1,37 +1,39 @@
 schema: '2.0'
 stages:
   prepare:
-    cmd: uv run python src/stages/prepare.py data/dataset.csv data/prepared
+    cmd: python src/stages/prepare.py tests/fixtures/sample_dataset.csv 
+      data/prepared
     deps:
-    - path: data/dataset.csv
-      hash: md5
-      md5: 308443a50e5c993e7b8a1cdb95750026
-      size: 66212309
     - path: src/stages/prepare.py
       hash: md5
-      md5: a884de0797da85014682cf925395b139
-      size: 2494
+      md5: 0cbee63325830b7143eb96c6d6b7d2d8
+      size: 2514
+    - path: tests/fixtures/sample_dataset.csv
+      hash: md5
+      md5: 661d669d07c42a6f167a59126d2c96cb
+      size: 3065
     outs:
     - path: data/prepared
       hash: md5
-      md5: 53059441931ba5b9ce51583111a30b66.dir
-      size: 66262172
+      md5: 139ef03354aa4c7f1feef9fa65699a78.dir
+      size: 3082
       nfiles: 2
   train:
-    cmd: uv run python src/stages/train.py data/prepared data/models
+    cmd: python src/stages/train.py data/prepared data/models --tracking-uri 
+      file:/opt/airflow/project/mlruns --experiment-name airflow_demo_pipeline
     deps:
     - path: data/prepared
       hash: md5
-      md5: 53059441931ba5b9ce51583111a30b66.dir
-      size: 66262172
+      md5: 139ef03354aa4c7f1feef9fa65699a78.dir
+      size: 3082
       nfiles: 2
     - path: src/stages/train.py
       hash: md5
-      md5: a2ea5b43f0b0c69dad05b2f0b537474d
-      size: 5225
+      md5: ca7a545421f94e4afef97ba037c8d4bb
+      size: 6150
     outs:
     - path: data/models
       hash: md5
-      md5: bd8064a4068bdc5b293b524eb45a70c5.dir
-      size: 925169
-      nfiles: 2
+      md5: b17ec2aed38020aad78d2be4e5ae7342.dir
+      size: 35010
+      nfiles: 4

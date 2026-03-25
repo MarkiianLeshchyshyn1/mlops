@@ -129,9 +129,11 @@ def main() -> None:
     }
 
     model_path = args.model_dir / "model.joblib"
+    model_pkl_path = args.model_dir / "model.pkl"
     metrics_path = args.model_dir / "metrics.json"
     confusion_matrix_path = args.model_dir / "confusion_matrix.png"
     joblib.dump(pipeline, model_path)
+    joblib.dump(pipeline, model_pkl_path)
     metrics_path.write_text(json.dumps(metrics, indent=2), encoding="utf-8")
     cm = confusion_matrix(y_test, y_pred)
     display = ConfusionMatrixDisplay(
@@ -170,6 +172,7 @@ def main() -> None:
 
     print(json.dumps(metrics, indent=2))
     print(f"Saved model artifact: {model_path}")
+    print(f"Saved model artifact: {model_pkl_path}")
 
 
 if __name__ == "__main__":

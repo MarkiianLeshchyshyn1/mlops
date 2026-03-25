@@ -1,0 +1,80 @@
+# Common configuration reused by Airflow services to avoid duplication.
+x-airflow-common:
+  &airflow-common
+  # Custom Airflow image extended with project ML dependencies.
+  build:
+    context: .
+    dockerfile: Dockerfile.airflow
+  environment:
+    # LocalExecutor lets Airflow run tasks locally inside the container.
+    AIRFLOW__CORE__EXECUTOR: LocalExecutor
+    # Disable demo DAGs so only our project DAGs are shown in the UI.
+    AIRFLOW__CORE__LOAD_EXAMPLES: "False"
+    # Connection string for Airflow metadata database in PostgreSQL.
+    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+    # Allows viewing Airflow config in the web UI for easier debugging in local setup.
+    AIRFLOW__WEBSERVER__EXPOSE_CONFIG: "True"
+    # Use the local user UID to reduce permission issues on mounted volumes.
+    AIRFLOW_UID: "1000"
+  volumes:
+    # Mount local DAGs so Airflow can automatically discover pipeline files.
+    - ./dags:/opt/airflow/dags
+    # Store Airflow logs on the host machine.
+    - ./airflow/logs:/opt/airflow/logs
+    # Mount the whole ML project so DAG tasks can access source code, DVC files, and data.
+    - ./:/opt/airflow/project
+  depends_on:
+    # Airflow services wait for PostgreSQL container to be available.
+    - postgres
+
+services:
+  postgres:
+    # PostgreSQL stores Airflow metadata: DAG runs, task states, users, logs metadata.
+    image: postgres:16
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    ports:
+      # Expose PostgreSQL to the host for local debugging if needed.
+      - "5432:5432"
+    volumes:
+      # Persist database data between container restarts.
+      - postgres-db-volume:/var/lib/postgresql/data
+
+  airflow-init:
+    <<: *airflow-common
+    # Run one-time initialization commands instead of the default Airflow entrypoint.
+    entrypoint: /bin/bash
+    command:
+      - -c
+      - |
+        # Create or update Airflow database schema.
+        airflow db migrate && \
+        # Create a local admin user for logging into the Airflow UI.
+        airflow users create \
+          --username airflow \
+          --password airflow \
+          --firstname Airflow \
+          --lastname Admin \
+          --role Admin \
+          --email airflow@example.com
+
+  airflow-webserver:
+    <<: *airflow-common
+    # Starts the Airflow web UI.
+    command: webserver
+    ports:
+      # Publish Airflow UI on localhost:8080.
+      - "8080:8080"
+    restart: unless-stopped
+
+  airflow-scheduler:
+    <<: *airflow-common
+    # Scheduler monitors DAGs and launches tasks according to schedule/dependencies.
+    command: scheduler
+    restart: unless-stopped
+
+volumes:
+  # Named volume for persistent PostgreSQL storage.
+  postgres-db-volume:
