@@ -14,3 +14,7 @@ wheels/
 mlruns/
 mlartifacts/
 .ci/
+
+airflow/logs/
+
+
