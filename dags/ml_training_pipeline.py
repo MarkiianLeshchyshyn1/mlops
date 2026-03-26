@@ -31,7 +31,7 @@ def choose_next_step() -> str:
 
 def check_data_exists() -> None:
     if not DATA_FILE.exists():
-        raise FileNotFoundError(f"Input data file not found: {DATA_FILE}")
+        raise FileNotFoundError(f"Input data  file not found: {DATA_FILE}")
 
 
 with DAG(
